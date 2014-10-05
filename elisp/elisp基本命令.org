@@ -52,4 +52,6 @@
              (insert-buffer-substring oldbuf start end)
              (dolist (window windows)
                (when (= (window-point window) point)
-                 (set-window-point window (point)))))))) 
+                 (set-window-point window (point))))))))
+** 'save-excursion  #记录当前的缓存，标记（mark），光标位置（point），以在执行函数后还原原先的buffer状态(current buffer)。
+           (save-excursion &rest BODY)  #BODY 中即为执行的函数
