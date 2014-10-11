@@ -2,7 +2,7 @@
 * 几个基本elisp帮助命令
     [c-h f]  #查看函数定义
     [c-h v] # 查看函数变量
-             [c-h k] #查看绑定键对应的函数
+    [c-h k] #查看绑定键对应的函数
 
 * TAGS
             [M-.]  # 'find-tag 函数 可以用来查看函数的源码。
@@ -33,7 +33,6 @@
       (defun append-to-buffer (buffer start end)
        "Append to specified buffer the text of the region.
      It is inserted into that buffer before its point.
-
      When calling from a program, give three arguments:
      BUFFER (or buffer name), START and END.
      START and END specify the portion of the current buffer to be copied."
@@ -53,5 +52,23 @@
              (dolist (window windows)
                (when (= (window-point window) point)
                  (set-window-point window (point))))))))
+** 'read-buffer  #该函数的目的是读取buffer的名字作为字符串返回，第一个参数必须是以冒号和空格结束的字符串。这是一个提示命令，第二个参数是在用户没有输入参数的情况下作为一个返回buffer.
 ** 'save-excursion  #记录当前的缓存，标记（mark），光标位置（point），以在执行函数后还原原先的buffer状态(current buffer)。
            (save-excursion &rest BODY)  #BODY 中即为执行的函数
+** 'get-buffer-create #返回缓存的名字，如果不存在该缓存则创造一个新的缓存(buffer).
+** 'get-buffer-winodw-list #返回所有包含[append-tobuffer]的窗体,第二个参数指包含minibuffer窗体，第三个参数指所有已经存在的frames。
+** ‘set-buffer # 设置buffer可以编辑操作
+** 'setq #将（point）的value绑定到point变量中去。
+** ’barf-if-buffer-read-only #emacs会报告一个错误（singal）来告诉我们是否要修改的缓存可读。
+** ’insert-buffer-substring #插入substring
+** 'dolist  循环遍历windows中的每一个window，并执行。
+** 'when 只要满足 第一个表达式(= (window-point window) point)不为空，就执行第二个表达式。将最后一次可执行的情况作为结果。(更新光标位置)
+* 基本的练习
+** 1. (defun simplified-end-of-buffer ()
+"my simply end-of-buffer"
+(let  ((point-end (point-max)))
+  (goto-char point-end)))
+   
+               
+
+
