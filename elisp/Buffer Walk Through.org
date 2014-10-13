@@ -53,7 +53,7 @@
                (when (= (window-point window) point)
                  (set-window-point window (point))))))))
 ** 'read-buffer  #该函数的目的是读取buffer的名字作为字符串返回，第一个参数必须是以冒号和空格结束的字符串。这是一个提示命令，第二个参数是在用户没有输入参数的情况下作为一个返回buffer.
-** 'save-excursion  #记录当前的缓存，标记（mark），光标位置（point），以在执行函数后还原原先的buffer状态(current buffer)。
+** 'save-excursion  #记录当前的标记（mark）和光标位置（point），以在执行函数后还原原先的buffer状态(current buffer)。
            (save-excursion &rest BODY)  #BODY 中即为执行的函数
 ** 'get-buffer-create #返回缓存的名字，如果不存在该缓存则创造一个新的缓存(buffer).
 ** 'get-buffer-winodw-list #返回所有包含[append-tobuffer]的窗体,第二个参数指包含minibuffer窗体，第三个参数指所有已经存在的frames。

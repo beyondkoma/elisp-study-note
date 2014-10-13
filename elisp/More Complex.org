@@ -1,0 +1,31 @@
+*  一些较为复杂的Buffer函数
+** 'copy-to-buffer
+      × 函数主体如下
+         (interactive "BCopy to buffer:\nr")
+	 (let ((oldbuf (current-buffer)))
+	   (with-current-buffer (get-buffer-create buffer)
+	     (barf-if-buffer-read-only)
+	     # 清除当前缓存内容
+	     (erase-buffer)
+	     (save-excursion
+	       (insert-buffer-substring oldbuf start end))))
+** 'insert-buffer
+     * 函数主体如下
+       (defun insert-buffer (buffer)
+       "Insert after point the contents of BUFFER.
+     Puts mark after the inserted text.
+     BUFFER may be a buffer or a buffer name."
+       (interactive "*bInsert buffer: ")
+       (or (bufferp buffer)
+           (setq buffer (get-buffer buffer)))
+       (let (start end newmark)
+         (save-excursion
+           (save-excursion
+             (set-buffer buffer)
+             (setq start (point-min) end (point-max)))
+           (insert-buffer-substring buffer start end)
+           (setq newmark (point)))
+         (push-mark newmark)))
+
+** 'beginning-of-buffer
+	       
