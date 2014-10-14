@@ -26,6 +26,10 @@
            (insert-buffer-substring buffer start end)
            (setq newmark (point)))
          (push-mark newmark)))
+	  * 'interactive 中×号作用是当被插入的缓存是只可读的话，那么emacs将会给出提示，该星号不需要用换行号隔开。b参数是要求一个已存在的buffer。
+	  * 'or 保证参数buffer是一个货真价实存在的buffer，而不仅仅是一个buffer。or是或者的意思，相当于c语言中的|。
+	  * 'save-excursion 两个excursion外部的还原current-buffer状态，内部的则还原 参数 buffer的状态。注意'save-excursion仅还原point和mark，缓存的内容是不需要还原的。'save-excursion的返回值为，列表中最后一个表达式所执行的结果。
+
 
 ** 'beginning-of-buffer
 	       
