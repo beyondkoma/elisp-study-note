@@ -1,0 +1,20 @@
+
+*  Lists是如何实现的
+** Lists diagrammed
+   * '(rose violet buttercup)
+   * (eq (cdr (cdr bouquet)) flowers)
+      (eq OBJ1 OBJ2)
+   Return t if the two args are the same Lisp object.
+    In summary, when a Lisp variable is set to a value, it is provided
+    with the address of the list to which the variable refers.
+** Symbols as Chest
+** List Exercise
+***  1.
+     (setq flowers '(violet buttercup))
+(setq more-flowers (cons  'rose  (cons 'chrysanthemum flowers) ))
+(setq fish (car flowers))
+(car more-flowers)
+(message "%S"  more-flowers)
+
+
+    
