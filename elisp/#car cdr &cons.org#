@@ -1,0 +1,21 @@
+* 区域缓存(处理)
+**  Narrowing advantages
+    区域处理可以很方便的帮助我们来操作缓存（buffer），比如搜寻单词时我们可以只搜寻区域中的内容而不需要考虑其他内容。
+该函数在emacs中的定义为'narrow-to-region 默认快捷键绑定为[C-x n n].
+    然而区域处理将会导致buffer中的部分内容不可见，这样当无意识的调用'narrow-to-region时，我们可能误以为我们删除了文件中的内容。
+而且'undo命令的使用并不会关闭narrowing效果。这样如果不知道使用'widen命令(默认快捷键绑定为 [C-x n w])使隐藏的buffer内容可见的话，我们也许会抓狂的。
+    Narrowing 不但能帮助我们这些用户，同时他对Lisp 解释器自身也有很大帮助。因为一个Elisp函数可以被设计成只在Narrowing的buufer中
+起到作用。例如 'what-line函数工作的时候讲不会考虑buffer中被narrowing的部分。'count-lines 在工作的时候将只会对narrowing区域中的buffer感兴趣。
+** save-restriction
+** what-line
+   'what-line 函数的作用是告诉光标所指位置的行号。下面是函数的源码
+   (defun what-line ()
+       "Print the current line number (in the buffer) of point."
+       (interactive)
+       (save-restriction
+         (widen)
+         (save-excursion
+           (beginning-of-line)
+           (message "Line %d"
+                    (1+ (count-lines 1 (point)))))))
+** narrow Exercise

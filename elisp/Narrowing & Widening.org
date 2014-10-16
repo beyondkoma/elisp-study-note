@@ -1,0 +1,46 @@
+* 区域缓存(处理)
+**  Narrowing advantages
+    区域处理可以很方便的帮助我们来操作缓存（buffer），比如搜寻单词时我们可以只搜寻区域中的内容而不需要考虑其他内容。
+该函数在emacs中的定义为'narrow-to-region 默认快捷键绑定为[C-x n n].
+    然而区域处理将会导致buffer中的部分内容不可见，这样当无意识的调用'narrow-to-region时，我们可能误以为我们删除了文件中的内容。
+而且'undo命令的使用并不会关闭narrowing效果。这样如果不知道使用'widen命令(默认快捷键绑定为 [C-x n w])使隐藏的buffer内容可见的话，我们也许会抓狂的。
+    Narrowing 不但能帮助我们这些用户，同时他对Lisp 解释器自身也有很大帮助。因为一个Elisp函数可以被设计成只在Narrowing的buufer中
+起到作用。例如 'what-line函数工作的时候将不会考虑buffer中被narrowing的部分。'count-lines 在工作的时候将只会对narrowing区域中的buffer感兴趣。
+** save-restriction
+               当调用表达式'save-restriction时，我们将摆脱narrowing控制的buffer（这些retrictionbuffer将会被保存起来），’save-restriction将在执行结束后还原narrowed区域。
+              'save-restriction
+               (save-restriction 
+	       BODY...)
+	       需要注意的是当 'save-restriction 和'save-excursion混合使用的时候，如果是一前以后使用的必须保证'save-excursion在外层，否则你将会在记录buffer中的narrowing时失败
+	       所以当这两个函数被写在一起时你需要像下面这样书写：
+	       (save-excursion
+	       (save-restriction
+               BODY...))
+	       考虑一下其他情况如果这两个函数并不没有写在一起，你使用的时候在函数中必须有合理的顺序
+	       eg：
+	       (save-restriction
+               (widen)
+               (save-excursion
+               BODY...))
+** what-line
+   'what-line 函数的作用是告诉光标所指位置的行号。下面是函数的源码
+   (defun what-line ()
+       "Print the current line number (in the buffer) of point."
+       (interactive)
+       (save-restriction
+         (widen)
+         (save-excursion
+           (beginning-of-line)
+           (message "Line %d"
+                    (1+ (count-lines 1 (point)))))))
+
+		函数详解：
+		'save-restriction 被调用时将取消掉在当前buffer中所有narrowing区域块。而'widen函数使得行数统计可以在整个buffer进行，否则我们将只计数可达到的区域。
+		所有被取消的narrowing，将在'save-restriction被执行结束时还原。
+		'count-lines函数的功能是得到当前行之前的所有行数。
+** narrow Exercise
+***  1.
+     
+
+
+

@@ -13,7 +13,7 @@
 	    2) 指定TAGS目录
 	       'M-x visit-tags-table
 * 基本buffer函数学习
-**  'goto-char #光标移动到指定位置
+** 'goto-char #光标移动到指定位置
 ** 'point-min #当前buffer最小的位置
 ** 'point-max #当前buffer最大的位置
 ** 'push-mark   #在当前位置设置一个标记，这个标记将会被保存在标记环中（ring），以便返回。
