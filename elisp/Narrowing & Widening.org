@@ -40,6 +40,28 @@
 		'count-lines函数的功能是得到当前行之前的所有行数。
 ** narrow Exercise
 ***  1.
+     (defun displaychararcters (num)
+"Write a function that will display the first 60 characters of the
+current buffer, even if you have narrowed the buffer to its latter half
+so that the first line is inaccessible.  Restore point, mark, and
+narrowing.  For this exercise, you need to use a whole potpourri of
+functions, including `save-restriction', `widen', `goto-char',
+`point-min', `message', and `buffer-substring'."
+(interactive "p display how much the characters is: ")
+(save-restriction
+  (widen)
+  (save-excursion
+    (let* (start
+	  end)
+          (cond ((<= num 0)
+		 ())
+		     ( (> num 0)  
+		       (if    (< (+ 1  (- (point-max) (point-min))) num) 
+			   (setq start (point-min) end (point-max))
+			 (setq start (point-min) end (+ start (- num 1))))))
+	  (if (> num 0)
+	     (message "%s"  (buffer-substring-no-properties start end))
+	    (message "%s"  "the characters is not bigger than 0"))))))
      
 
 
