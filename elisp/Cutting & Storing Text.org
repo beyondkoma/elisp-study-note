@@ -27,13 +27,44 @@
                                               nil nil arg)
                               (point))))
 *** zap-to-char-interactive
+       p代表一个前缀数值参数，c代表一个字符操作。
+       如果'zap-to-char是在一个只读buffer中使用，那么该函数只能将文本复制到kill ring，而不能删除它。
+       echo 区域讲会给出该buffer仅只读的提示。
 *** zap-to-char body
+    'char-table-p 判断检查输入的参数是否在参数表中，如果存在的话，将会把char 赋值为char参数表中的一个字符值。
+    'aref 从数组列表中提取值。
+    'progn
+    'search-forward
 *** search-forward
+    'char-to-string将字符作为字符串看待。下面我们来看'search-forward这个函数
+    第一个参数必须是一个字符串，它是我们搜索的目标。
+    第二个参数是设定字符串搜索的界限，这里为nil代表搜索界限为整个buffer。
+    第三个参数告诉函数如果搜索失败的话，将会怎么做。nil将会使函数发出一个错误信号来告诉emacs。
+    第四个参数告诉函数要搜寻的字符串重复的次数，该参数为可选参数。如果该参数不存在的话，则默认值为1，如果参数默认值为负的话。搜索将会往前搜索。
+    ’search-forward函数的摸板如下所示：
+     (search-forward "TARGET-STRING"
+                     LIMIT-OF-SEARCH
+                     WHAT-TO-DO-IF-SEARCH-FAILS
+                     REPEAT-COUNT)
 *** progn
+    'progn使它的每一个参数表达式按顺序执行，并将最后一个表达式的返回值返回。
+    'progn的模板如下所示。
+    (progn
+    BODY...)
 *** Summing up zap-to-char
 ** kill-region
+   'zap-to-char函数使用到了'kill-region函数，该函数从一段区域中剪切文本，并将这段文本保存在 kill ring中。
+   我们则可以通过它来还原我们删除掉的文本。
+   'kill-region将会使用'condition-case和'copy-region-as-kill函数这两个我们都会在下面详加解释
+*** Complete kill-region
+*** condition-case
+*** Lisp macro
 ** copy-region-as-kill
+*** Complete copy-region-as-kill
+*** copy-region-as-kill body
 ** Digression into c
 ** defvar
+*** See variable current value
+*** defvar and asterisk
 ** cons & search-fwd Review
 ** search Exercises
