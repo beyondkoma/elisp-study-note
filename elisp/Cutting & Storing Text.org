@@ -1,0 +1,39 @@
+* 剪切和存储文本
+* Menu:
+  当你用'kill命令剪切或删除掉缓存（buffer）中的一段文本内容时。这段内容将会被保存在list中，你可以使用'yank命令召回他。
+** Storing Text
+   emacs用一个list来管理被存储的文本串。通过使用'car和'nthcdr函数，我们就可以检索list中的文本串。
+  eg:
+  (car (nthcdr 1 '("another piece"
+                      "a piece of text"
+                      "previous piece")))
+          => "a piece of text"
+  这个list被称为”kill ring“，本章主要就是讲解这个kill ring的用法的。
+** zap-to-char
+*** Complete zap-to-char
+    'zap-to-char函数的功能是删除从指定光标位置起到指定字符（可以通过传递数字参数来确定是指定字符的第几个）处之间的文本内容。
+    被删除后的文本将会被放在kill ring中去。我们可以通过输入'C-y('yank)来召回被删除的文本内容.
+    如果被指定的字符并不存在，'zap-to-char将会给我们"Search failed"的提示。
+    下面是函数的完整实现:
+    (defun zap-to-char (arg char)
+       "Kill up to and including ARG'th occurrence of CHAR.
+     Case is ignored if `case-fold-search' is non-nil in the current buffer.
+     Goes backward if ARG is negative; error if CHAR not found."
+       (interactive "p\ncZap to char: ")
+       (if (char-table-p translation-table-for-input)
+           (setq char (or (aref translation-table-for-input char) char)))
+       (kill-region (point) (progn
+                              (search-forward (char-to-string char)
+                                              nil nil arg)
+                              (point))))
+*** zap-to-char-interactive
+*** zap-to-char body
+*** search-forward
+*** progn
+*** Summing up zap-to-char
+** kill-region
+** copy-region-as-kill
+** Digression into c
+** defvar
+** cons & search-fwd Review
+** search Exercises

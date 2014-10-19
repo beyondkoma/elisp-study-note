@@ -1,0 +1,5 @@
+* 还原文本操作
+* Menu:
+** Kill Ring Overview
+** kill-ring-yank-pointer
+** yank nthcdr Exercises
