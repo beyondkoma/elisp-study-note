@@ -1,5 +1,93 @@
 * 区域缓存(处理)
-**  Narrowing advantages
-** save-restriction
-** what-line
-** narrow Exercise
+** Strange Names
+    我们来介绍下cons，car，cdr这三个函数名称的由来。
+    con 是单词 'construct 的缩写。car来自于语句'Contents of the Address part of the Register'的简写。
+    cdr来自于’Contents of the Decrement part of the Register'的简写。
+    这在当时是指电脑硬件的寄存器，当然在那个时代是合理的，但是现在依然这样叫的话却很不合理。
+    现在我们仍然沿用老名字（为了统一）。如果用现在的叫法的话cdr叫做rest也许会更合适。
+    这个事例告诉我们函数命名是一个需要反复仔细斟酌的事情。它可能有许多地方需要我们注意和小心。
+** car & cdr
+   * car的用法
+      (car '(rose violet daisy buttercup))
+     执行上面这条语句，'rose将会出现在回显缓存中。
+     有一点需要注意的是，car并不破坏表list的结构，上面例子中实际上它获取的是'rose的地址。
+     学术上把这种特性称之为non-destructive（非破坏性）。这是非常重要的基本概念，我们需要理解记忆。
+   * cdr的用法
+      (cdr '(rose violet daisy buttercup))
+     执行上面这条语句，'(violet daisy buttercup)将会出现在回显缓存中。
+     cdr的特性与car一样，在此不在追述。
+    另外当表达式前面有个'（qutote）时，lisp解释器将不会解释其中的内容，否则解释器将会把该式子看做一个表达式。
+** cons
+   cons 创造一个新的list，但是并不破坏原先的list，所以它也不具有破坏性。
+   * Build a list
+     cons 第二个参数必须是一个list结构（可以是空list）
+     eg:
+     (cons 'buttercup ())
+          => (buttercup)
+     (cons 'daisy '(buttercup))
+          => (daisy buttercup)
+     (cons 'violet '(daisy buttercup))
+          => (violet daisy buttercup)
+     (cons 'rose '(violet daisy buttercup))
+          => (rose violet daisy buttercup)
+   * length
+     eg:
+     (length '(buttercup))
+          => 1
+     (length '(daisy buttercup))
+          => 2
+     (length (cons 'violet '(daisy buttercup)))
+          => 3
+** nthcdr
+   'nthcdr作用是重复的调用cdr。
+   eg:
+   (nthcdr 2 '(pine fir oak maple))
+          => (oak maple)
+     ;; Leave the list as it was.
+     (nthcdr 0 '(pine fir oak maple))
+          => (pine fir oak maple)
+     ;; Return a copy without the first element.
+     (nthcdr 1 '(pine fir oak maple))
+          => (fir oak maple)
+     ;; Return a copy of the list without three elements.
+     (nthcdr 3 '(pine fir oak maple))
+          => (maple)
+     ;; Return a copy lacking all four elements.
+     (nthcdr 4 '(pine fir oak maple))
+          => nil
+     ;; Return a copy lacking all elements.
+     (nthcdr 5 '(pine fir oak maple))
+          => nil
+** nth
+   该函数可以返回LIST元素中的第n个元素。
+   (defun nth (n list)
+       "Returns the Nth element of LIST.
+     N counts from zero.  If LIST is not that long, nil is returned."
+       (car (nthcdr n list)))
+     eg:
+      (nth 0 '("one" "two" "three"))
+         => "one"
+     (nth 1 '("one" "two" "three"))
+         => "two"
+    nth同样也是 non-destructive的。
+** setcar
+   eg:
+   (setq animals '(antelope giraffe lion tiger))  
+   animals
+   (setcar animals 'hippopotamus)
+   animals
+   'setcar破坏了list的结构。
+** setcdr
+   eg:
+     (setq domesticated-animals '(horse cow sheep goat))
+     domesticated-animals
+     (setcdr domesticated-animals '(cat dog))
+     domesticated-animals
+** cons Exercise
+*** 1.
+    (setq birds   (cons 'goose (cons 'cuckoo  (cons  'eagle  (cons 'cuckoo  ())))))
+    birds
+    (setcar birds 'goldfish)
+    birds
+    (setcdr birds '(shark whale))
+
