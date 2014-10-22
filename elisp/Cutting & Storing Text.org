@@ -324,9 +324,11 @@
      (message "%s" "Found!")))))
 *** 
      2.
+
        (defun third-kill-ring ()
-	 (let ((third-current-element  (car (nthcdr 2 kill-ring))))
-	   (if   t
-	      (message "the third element in kill-ring is %s" third-current-element) 
-	     (message "the third element is not exist"))))
-       # 该函数有问题，暂不明原因。
+     (interactive)
+     (let ((third-current-element  (car (nthcdr 2 kill-ring))))
+     (if   third-current-element
+     (message "the third element in kill-ring is %s" third-current-element) 
+     (message "the third element is not exist"))))
+

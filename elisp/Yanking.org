@@ -1,5 +1,8 @@
 * 还原文本操作
 * Menu:
+            'yank函数默认绑定'c-y ，可以从kill ring中取出字符串 插入buffer中。
+	    c-y命令取出kill-ring中第一个元素，依次循环使用M-y，可以返还kill ring 中
+	    后面的元素。当最后一个元素被返回后，如果继续敲击M-y，将返回kill-ring中第一个元素。
 ** Kill Ring Overview
 ** kill-ring-yank-pointer
 ** yank nthcdr Exercises
