@@ -311,9 +311,22 @@
 	      * ’kill-region，从buffer中剪裁文本并保存到kill ring 中。这你就可以用‘yank返回结果。
 	      * ’copy-region-as-kill 复制point和mark之间的文本到kill ring 中。
 	      * ‘delete-and-extract-region 删除point和mark之间的文本，如果删除后，你将不能够再返回它了。
-
-
- 
-
-
-** search Exercises
+** searching Exercises
+***  
+     1.
+     (defun test-search (str &optional arg)
+     "Write an interactive function that searches for a string.  If the
+     search finds the string, leave point after it and display a message"
+     (interactive "stest-search the string: ")
+     (let  ()
+     (when str
+     (when  (search-forward str nil (message "%s" "not Found!") arg)
+     (message "%s" "Found!")))))
+*** 
+     2.
+       (defun third-kill-ring ()
+	 (let ((third-current-element  (car (nthcdr 2 kill-ring))))
+	   (if   t
+	      (message "the third element in kill-ring is %s" third-current-element) 
+	     (message "the third element is not exist"))))
+       # 该函数有问题，暂不明原因。
