@@ -167,11 +167,153 @@
 		这两行代码的意思是如果Transient Mark mode被开启的话，那么就阻止该复制区域被高亮显示。
 *** copy-region-as-kill body
 **** last-command & this-command
+          last-command
+	  this-command
+	  这里需要注意的是如果上一个命令是'kill-region的话,那么我们将使用'kill-append函数将的得到的字符串，链接到kill ring 中最后一个string中去。
+	  如果不是的话，我们就是使用'kill-new函数将得到的字符串，作为一个新的元素，添加到kill ring 中去。
 **** kill-append function
+     函数实体:
+     (defun kill-append (string before-p &optional yank-handler)
+       "Append STRING to the end of the latest kill in the kill ring.
+     If BEFORE-P is non-nil, prepend STRING to the kill.
+     ... "
+       (let* ((cur (car kill-ring)))
+         (kill-new (if before-p (concat string cur) (concat cur string))
+                   (or (= (length cur) 0)
+                       (equal yank-handler
+                              (get-text-property 0 'yank-handler cur)))
+                   yank-handler)))
+
+	 concat 函数演示 ：它可以用来修改列表中的string
+	 (concat "abc" "def")
+          => "abcdef"
+	  (concat "new "
+             (car '("first element" "second element")))
+             => "new first element"
+	  (concat (car
+             '("first element" "second element")) " modified")
+          => "first element modified"
 **** kill-new function
+        函数实体:
+	(defun kill-new (string &optional replace yank-handler)
+       "Make STRING the latest kill in the kill ring.
+     Set `kill-ring-yank-pointer' to point to it.
+
+     If `interprogram-cut-function' is non-nil, apply it to STRING.
+     Optional second argument REPLACE non-nil means that STRING will replace
+     the front of the kill ring, rather than being added to the list.
+     ..."
+       (if (> (length string) 0)
+           (if yank-handler
+               (put-text-property 0 (length string)
+                                  'yank-handler yank-handler string))
+         (if yank-handler
+             (signal 'args-out-of-range
+                     (list string "yank-handler specified for empty string"))))
+       (if (fboundp 'menu-bar-update-yank-menu)
+           (menu-bar-update-yank-menu string (and replace (car kill-ring))))
+       (if (and replace kill-ring)
+           (setcar kill-ring string)
+         (push string kill-ring)
+         (if (> (length kill-ring) kill-ring-max)
+             (setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
+       (setq kill-ring-yank-pointer kill-ring)
+       (if interprogram-cut-function
+           (funcall interprogram-cut-function string (not replace))))
+	     'kill-new函数的主要的作用就是插入新的文本串或者替换文本串，在kill ring 中。
+	     'push将其第一个参数值放置到第二个参数值中去。下面这两个函数与'push函数具有同样的意义
+	     (setq kill-ring (cons string kill-ring))
+	     (add-to-list kill-ring string)
+	     'kill-ring-yank-pointer是一个全局变量，用来和'kill-ring进行绑定。
+	     'foundp  检测第一个参数是否是一个存在的函数。如果存在的话返回true。
+	     ’menu-bar-update-yank-menu 是emacs中的 Edit item下的一个菜单条目。你可以通过鼠标进行操作选择。
+	     'funcall 调用第一个参数中的函数，并将其他的参数作为第一个参数函数的参数。
+	     'interprogram-cut-function 该变量操纵一个函数用来和其他操作系统进行交互。
 ** Digression into c
+              在前面的'copy-region-as-kil函数中,我们用到了'filter-buffer-substring函数，而该函数又调用了 'delete-and-extract-region
+	      这个函数。
+	      ‘delete-and-extract-region这个函数是用c语言编写的。它是emacs系统的一个基本函数，我们下面就来讨论下该函数的实现
+	      该函数是用c的宏实现的。
+	      下面是宏的模版代码：
+	         DEFUN ("delete-and-extract-region", Fdelete_and_extract_region,
+		 Sdelete_and_extract_region, 2, 2, 0,
+		 doc: /* Delete the text between START and END and return it.  */)
+		 (Lisp_Object start, Lisp_Object end)
+		 {
+		 validate_region (&start, &end);
+		 if (XINT (start) == XINT (end))
+		 return empty_unibyte_string;
+		 return del_range_1 (XINT (start), XINT (end), 1, 1);
+		 }
+		 该DEFUN分为七个部分:
+		 * 第一部分是在Lisp中的函数名。
+		 * 第二部分是在c中的函数名。
+		 * 第三部分是c的常量结构。
+		 * 第四第五部分指定最大,最小两个参数,该函数明确地需要两个参数。
+		 * 剩下的就是func body。
+		 validate_region 检查参数值是否是正确的类型，或者说在在一定范围内。如果start和end两个值
+		 相等，就返回一个空字符串。
+		 del_range_1删除实际的文本内容。
 ** defvar
+                这节主要讲述'kill-ring变量如何用'defvar创造和初始化。
+		'defvar与'setq一样给一个变量设置值。但它和'setq有两点不同:
+		* ’defvar仅仅在变量没有被设置任何值的时候给其赋值（也就是初始化)，如果该变量已经有值得话，变量将不会被赋予任何值。
+		* ‘defvar有 文档字符串。
 *** See variable current value
+               看变量当前值
+               (defvar kill-ring nil
+	       "List of killed text sequences.
+	       ...")
 *** defvar and asterisk
+                 当你用'defvar指定一个变量的话，你是可以临时的改变变量的值的。
+                 (defvar shell-command-default-error-buffer nil
+		 "*Buffer name for `shell-command' ... error output.
+		 ... ")
+		 你可以用'set-variable 命令来 改变 'shell-command-default-error-buffer临时的。然而这些变量值只能在会话期起作用。
+		 每次 Emacs重启的时候，它都会读取原先被初始化的值，除非你在你的.emacs进行过初始化设置。
 ** cons & search-fwd Review
+              本章总结:
+	      * 'car返回列表的第一个元素，'cdr返回第二个以及随后的元素列表。
+		  eg: 
+		  (car '(1 2 3 4 5 6 7))
+		  => 1
+                  (cdr '(1 2 3 4 5 6 7))
+                 => (2 3 4 5 6 7)
+	      * cons 将第一个参数和第二个参数构造在一起。
+		eg:
+		(cons 1 '(2 3 4))
+               => (1 2 3 4)
+	      * 'funcall将把它的第一个参数作为函数来执行，它将把它余下的参数传递给第一个参数。
+	      * ’nthcdr 返回对一个list执行n次 cdr后所返回的结果值。
+		eg：
+		 (nthcdr 3 '(1 2 3 4 5 6 7))
+		=> (4 5 6 7)
+	      * 'setcar 改变list中的第一个元素值，‘setcdr改变list中第二个以及随后的列表。
+		eg：
+		(setq triple '(1 2 3))
+                (setcar triple '37)
+                triple
+		=> (37 2 3)
+               (setcdr triple '("foo" "bar"))
+               triple
+               => (37 "foo" "bar")
+	      * ’progn 执行序列中的每个参数，并将最后一个值作为结果返回。
+		eg：
+		(progn 1 2 3 4)
+		=>4
+	      * 'save-restriction 记录当前缓存中narrowing中的区域，并在执行完该表达式后返回。
+	      * ‘search-forward 搜索一个字符串，如果字符串存在的话，移动光标。如果用到正则表达式的话，用类似的函数're-search-forward.
+		这两个函数需要四个参数。
+		1. 要搜索的字符串或者高亮表达式。
+		2. 可选的，搜索的限制。
+		3. 可选的，如果搜索失败返回什么。
+		4. 可选的，重复搜索多少次，如果参数为负则前向搜索。
+	      * ’kill-region，从buffer中剪裁文本并保存到kill ring 中。这你就可以用‘yank返回结果。
+	      * ’copy-region-as-kill 复制point和mark之间的文本到kill ring 中。
+	      * ‘delete-and-extract-region 删除point和mark之间的文本，如果删除后，你将不能够再返回它了。
+
+
+ 
+
+
 ** search Exercises
