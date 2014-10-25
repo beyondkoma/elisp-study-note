@@ -4,5 +4,19 @@
 	    c-y命令取出kill-ring中第一个元素，依次循环使用M-y，可以返还kill ring 中
 	    后面的元素。当最后一个元素被返回后，如果继续敲击M-y，将返回kill-ring中第一个元素。
 ** Kill Ring Overview
+            有三个函数用来从kill ring中返回文本,
+	    * 'yank函数 对应快捷键 [C-y].
+	    * ‘yank-pop 函数对应快捷键 [M-y].
+	    * 'rotate-yank-pointer函数。
+	      这些函数都是通过使用一个叫做'kill-ring-yank-pointer的变量来操作kill ring .
+	      他们都共同调用 (insert (car kill-ring-yank-pointer))。
+	      所以接下来我们需要理解'kill-ring-yank-pointer的用法。
 ** kill-ring-yank-pointer
+                'kill-ring-yank-pointer这也是一个变量。指向的是kill-ring部分list长度。
 ** yank nthcdr Exercises
+***  1.   
+            first: (car kill-ring)
+	    second: (car (cdr kill-ring))
+	    third: (car (nthcdr 2 kill-ring))
+	    fourth:(car (nthcdr 3 kill-ring))
+
