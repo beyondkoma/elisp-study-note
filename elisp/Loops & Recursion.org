@@ -1,6 +1,87 @@
 * 循环和递归
 * Menu:
 ** while
+             while 模板
+              (while TRUE-OR-FALSE-TEST
+	      BODY...)
+***  Looping with while
+*** Loop Example
+     (setq animals '(gazelle giraffe lion tiger))
+     (setq animals (cdr animals))
+     eg:
+      (while TEST-WHETHER-LIST-IS-EMPTY
+       BODY...
+       SET-LIST-TO-CDR-OF-LIST)
+*** print-elements-of-list
+              eg:
+               (setq animals '(gazelle giraffe lion tiger))
+	       (defun print-elements-of-list (list)
+	       "Print each element of LIST on a line of its own."
+	       (while list
+               (print (car list))
+               (setq list (cdr list))))
+	       (print-elements-of-list animals)
+*** Incrementing Loop
+*** Incrementing Loop Details
+**** Incrementing Example
+**** Inc Example parts
+**** Inc Example altogether
+                完整的实现代码如下所示:
+		(defun triangle (number-of-rows)    ; Version with
+                                         ;   incrementing counter.
+					 "Add up the number of pebbles in a triangle.
+					 The first row has one pebble, the second row two pebbles,
+					 the third row three pebbles, and so on.
+					 The argument is NUMBER-OF-ROWS."
+					 (let ((total 0)
+					 (row-number 1))
+					 (while (<= row-number number-of-rows)
+					 (setq total (+ total row-number))
+					 (setq row-number (1+ row-number)))
+					 total))
+*** Decrementing Loop
+    (defun triangle (number)                ; Second version.
+    "Return sum of numbers 1 through NUMBER inclusive."
+       (let ((total 0))
+       (while (> number 0)
+       (setq total (+ total number))
+       (setq number (1- number)))
+       total))
 ** dolist dotimes
+***  dolist
+          (setq animals '(gazelle giraffe lion tiger))
+	  (defun reverse-list-with-dolist (list)
+	  "Using dolist, reverse the order of LIST."
+	  (let (value)  ; make sure list starts empty
+          (dolist (element list value)
+          (setq value (cons element value)))))
+	  (reverse-list-with-dolist animals)
+	  dolist 将绑定element的值为 （car list），而list则在每次循环中缩短。
+*** dotimes
+    (defun triangle-using-dotimes (number-of-rows)
+    "Using dotimes, add up the number of pebbles in a triangle."
+    (let ((total 0))  ; otherwise a total is a void variable
+    (dotimes (number number-of-rows total)
+    (setq total (+ total (1+ number))))))
+    (triangle-using-dotimes 4)
+    第二个参数是 循环的次数。 
 ** Recursion
+      triangle 递归版:
+     (defun triangle-using-cond (number)
+       (cond ((<= number 0) 0)
+             ((= number 1) 1)
+             ((> number 1)
+             (+ number (triangle-using-cond (1- number))))))
+*** Recursive Patterns
+*** No Deferment
+*** No deferment solution
 ** Looping exercise
+*** 1.
+(defun sumPep (row)
+ (setq current-row 1 total 0)
+ (while (<= current-row row)
+   (setq total (+ current-row total) 
+                       current-row (1+ current-row))
+   (print total)))
+(sumPep 7)
+*** 2.

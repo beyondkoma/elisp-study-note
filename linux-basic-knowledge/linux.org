@@ -1,0 +1,44 @@
+
+*  一些命令
+    file， df， free，less，ln
+  /etc下是系统层面的配置文件这里有几个有趣的文件
+** /etc/crontab 定义了自动化运行的时间
+** /etc/passwd 用户账户列表
+   每行有七个成分，分别如下。
+   用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell
+   eg:
+   root:x:0:0:root:/root:/bin/bash
+   daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+   bin:x:2:2:bin:/bin:/usr/sbin/nologin
+   这里我们说一下用户标识号,root的标示号为0，系统管理的账号为1-99,组标识号则存在/etc/group中
+
+** /etc/fstab 存储设备以及相关挂载点的列表
+** 通配符
+    × 匹配任意多个字符 (包括 0和1）
+   ？匹配任一单个字符(不包括0个)
+    [characters]  匹配任意一个属于字符集的字符。
+    [!characters] 匹配任意一个不属于字符集的字符。
+    [ [ : class :]] 匹配任意一个属于指定字符类的字符。
+ 
+    常用字符类:
+    [:alnum:]  任意字母和u数字
+    [;alpha:]  任意一个字母
+    [:digit]  任意一个数字
+    [:lower:]  任意小写字母
+    [:upper:]  任意大写字母
+** shell 脚本
+   if 语句
+   if ...; then
+   ...
+   elif ....; then
+   ...
+   else
+   ...
+   fi
+
+   [-f "somefile"] :判断是否是一个文件
+   [-x "/bin/ls"] :判断/bin/ls是否存在并有可执行权限。
+   [-n "$var"] : 判断 $var变量是否有值
+   ["$a" = "$b"]:判断 $a和$b是否相等
+   
+

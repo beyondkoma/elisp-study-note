@@ -148,3 +148,12 @@
        (setq kill-ring-yank-pointer kill-ring)
        (if interprogram-cut-function
            (funcall interprogram-cut-function string (not replace))))
+
+
+
+;; print-elements-of-list
+(defun print-elements-of-list (list)
+       "Print each element of LIST on a line of its own."
+       (while list
+         (print (car list))
+         (setq list (cdr list))))
