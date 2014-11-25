@@ -1,0 +1,122 @@
+g
+#+TITLE: org-mode
+#+AUTHOR: beyondkoma
+#+EMAIL:850239158@qq.com
+#+KEYWORDS: EMACS
+#+OPTIONS: H:4 toc:t
+#+TAGS: { 桌面(d) 服务器(s) }  编辑器(e) 浏览器(f) 多媒体(m) 压缩(z)    
+
+
+#+FILETAGS: :PETER:BOB
+* sdf                                                                   :大酒神:
+** sfsa                                                             :JINGHUA:
+** dfkdl
+*** sa
+**** af                                                                   :d:
+****** df                                                                 :d:
+asdfshuaige
+
+sadfasdllhehehe
+
+http://www.astro.uva.nl/~dominik   
+file:/home/beyonkoma/work/heh.txt
+
+[[link][des]]
+[[link][heh]]
+ link
+
+锚点 #<<my-anchor>>
+[[my-anchor][neib]]
+
+
+*粗体*
+/斜体/
++删除线+
+_下划线_
+下标: H_2 O
+上标: E=mc^2
+等宽字: =git=  or  ~git~
+||
+
+| Name | pone | age |     C-c RET
+|------+------+-----|
+|      |      |     |
+
+段落
+
+My favorite scenes are (in this order)
+  1. The attack of the Rohirrim
+  2. Eowyn's fight with the witch king
+      + this was already my favorite scene in the book
+      + I really like Miranda Otto.
+  Important actors in this film are:
+  1. Elijah Wood :: He plays Frodo
+  2. Sean Austin :: He plays Sam, Frodo's friend.
+
+
+  1. hh :: dd
+  2. 
+  3. 
+
+  4. 
+  5. 
+  6. 
+  7. 
+
+
++ 
+
+
+
+_____
+-----
+
+
+
+#+BEGIN_HTML
+  <div class="cnblogs_Highlighter">
+  <pre class="brush:cpp">
+  int main()
+  {
+    return 0;
+  }
+  </pre>
+  </div>
+#+END_HTML
+
+
+
+#+BEGIN_VERSE
+ Great clouds overhead
+ Tiny black birds rise and fall
+
+ Snow covers Emacs
+     -- AlexSchroeder
+#+END_VERSE
+
+#+BEGIN_QUOTE
+  缩进区块
+#+END_QUOTE
+
+#+BEGIN_CENTER
+Everything should be made as simple as possible, \\
+but not any simpler
+#+END_CENTER
+
+
+: 单行的例子以冒号开头
+
+#+BEGIN_EXAMPLE
+ 多行的例子
+ 使用区块
+#+END_EXAMPLE
+
+#+BEGIN_COMMENT
+  块注释
+  ...
+#hehe
+hf
+ #+END_COMMENT
+
+
+
