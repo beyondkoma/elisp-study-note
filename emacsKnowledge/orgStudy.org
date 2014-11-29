@@ -120,3 +120,8 @@ hf
 
 
 
+#+BEGIN_SRC ruby
+  require 'redcarpet'
+  md = Redcarpet.new("Hello, world.")
+  puts md.to_html
+#+END_SRC

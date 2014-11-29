@@ -1,7 +1,11 @@
-
-*  一些命令
-    file， df， free，less，ln
-  /etc下是系统层面的配置文件这里有几个有趣的文件
+#+TITLE: Linux 常用知识
+*  一些Linux知识
+    file， df， free，less，ln,
+** tar 常用命令
+    .bz2文件操作
+    # tar -cjf all.tar.bz2 *.jpg 
+  　#  tar -xjf all.tar.bz2 
+   /etc下是系统层面的配置文件这里有几个有趣的文件
 ** /etc/crontab 定义了自动化运行的时间
 ** /etc/passwd 用户账户列表
    每行有七个成分，分别如下。
@@ -40,5 +44,7 @@
    [-x "/bin/ls"] :判断/bin/ls是否存在并有可执行权限。
    [-n "$var"] : 判断 $var变量是否有值
    ["$a" = "$b"]:判断 $a和$b是否相等
-   
+** tcpdump 网络抓包
+   * 抓本地回环接口数据包端口号为7697
+   ： tcpdump -i lo  port 7697 
 
