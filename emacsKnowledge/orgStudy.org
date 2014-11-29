@@ -26,7 +26,7 @@ file:/home/beyonkoma/work/heh.txt
  link
 
 锚点 #<<my-anchor>>
-[[my-anchor][neib]]
+[[my-anchor][neib]
 
 
 *粗体*
