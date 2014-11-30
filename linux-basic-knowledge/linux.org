@@ -1,6 +1,22 @@
 #+TITLE: Linux 常用知识
+
 *  一些Linux知识
     file， df， free，less，ln,
+** 常用的命令
+   1. type 显示命令的类型
+    : type ls
+   2. which 显示可执行程序的位置
+     : which ls
+   3.  使用别名创建自己的命令
+        ; 号可以支持在命令终端 输入多条命令例如
+       : cd /usr; ls ; cd -
+       而我们可以用alias给组合命令起个别名已来调用。
+       #+BEGIN_EXAMPLE
+       type foo   ;如果 foo 命令已存在在linux中，则需更换命令名
+       cd /usr; ls ; cd -
+       alias foo='cd /usr; ls ; cd -'
+       #+END_EXAMPLE
+
 ** tar 常用命令
     .bz2文件操作
     # tar -cjf all.tar.bz2 *.jpg 
@@ -31,20 +47,51 @@
     [:lower:]  任意小写字母
     [:upper:]  任意大写字母
 ** shell 脚本
-   if 语句
-   if ...; then
-   ...
-   elif ....; then
-   ...
-   else
-   ...
-   fi
+   + 算术表达式
+      格式如下: $((expression)) 算术表达式只支持整数不支持小数，如：
+     ： echo $(($((5**2)) * 3)) 空格在算术表达式重视没有意义的，所以你可以任意的嵌套。
+   + 双引号(soft quote)
+     #+BEGIN_EXAMPLE
+       考虑 两个例子的区别
+       : echo $(cal)
+       : echo "$(cal)"
+    #+END_EXAMPLE
+   + 单引号
+     #+BEGIN_EXAMPLE
+      several examples:
+      /1. echo text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER/
+     /2.  echo "text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER"/
+     /3.  'echo text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER'/
+     #+END_EXAMPLE
+   + 转义字符
+     \ 可以屏蔽特殊字符的意思
+     ： echo " balance is \$5.00"
 
-   [-f "somefile"] :判断是否是一个文件
-   [-x "/bin/ls"] :判断/bin/ls是否存在并有可执行权限。
-   [-n "$var"] : 判断 $var变量是否有值
-   ["$a" = "$b"]:判断 $a和$b是否相等
+     
+
+
+
+
+
+     
+
+   + 
+
+   
+   
+
 ** tcpdump 网络抓包
    * 抓本地回环接口数据包端口号为7697
-   ： tcpdump -i lo  port 7697 
+   ： tcpdump -i lo  port 7697
+** I/O重定向
+*** cat:
+*** sort:
+*** uniq:
+*** wc:
+*** grep:
+*** head:
+*** tail:
 
+
+_____
+** 
