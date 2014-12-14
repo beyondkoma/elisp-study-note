@@ -9,7 +9,7 @@
 	    TAGS支持多种类型的文件，它甚至可以支持普通的文本文件。
 	    TAGS通过 ‘tags tables’来记录你所标记的函数，变量以及相应的内容。
 	    1) 设置方法（到指定目录下 编译生成 etags文件）
-	       'M-x compile RET etags *.el RET
+	       'M-x compile RET etags -a *.el RET
 	    2) 指定TAGS目录
 	       'M-x visit-tags-table
 * 基本buffer函数学习

@@ -1,5 +1,5 @@
 #+TITLE: dbss程序讲解
-#+AUTHOR: beyondkoma
+#+AUTHOR: gaolan
 #+EMAIL:850239158@qq.com
 
 * main入口
@@ -9,7 +9,7 @@
    如果证书过期的话，需要更换证书。
 *** MD5Verify()
 ** g_pMDSMain->ChenkStartParam(argc,argv)
-   这里主要是对配置文件进行检查，读取参数，以及完成dbss程序必要的初始化工作。
+     这里主要是对配置文件进行检查，读取参数，以及完成dbss程序必要的初始化工作。
 *** int CDBSSAPP::InitApp (int argc, char **argv)
     1.检测共享内存文件是否存在如果不存在则需要创造一个。：access("/dev/shm/dswshm", 0)
     1. 设置日志级别，初始化日志管理系统   ：g_SetLogLevel(g_nLogLevel);  InitLog("dbss", 10, 50, 64);
@@ -17,28 +17,68 @@
     3. 读取dbinfo.cfg                :int CDBSSAPP::ReadSysCfg (char *strIniFile)
        主要有版本号，端口号，oracle 用户名,密码,服务实例名，table_store,CFrameToDb初始化等等，内容比较多不再赘述。
     
-
 ** g_pMDSMain->RunApp()
    RunApp是整个dbss程序的主要运行。它主要分为以下几大块儿。
 *** server_port_in_use 函数
     通过netstat 命令检测端口号是否被占用，如果被占用程序退出。
 *** server_start函数
-****
 **** theConfiguration.load(filename, tagName);
      这里将加载程序文件名，到配置文件对象中去。
 **** theQmanager = new XQManager();
      这里我们将生成Qmanager对象,用来管理 memory cache.
 **** theServer.start();
-     XServerThread类对象将会开启一个新的线程用来处理网络的通讯。
-***** svr = new ServerXSocket(port); //7696
+     XServerThread类对象将会开启一个线程用来处理网络的通讯。
+***** svr = new ServerXSocket(port)
+            //7696
      这里将生成ServerXSocket类对象,完成套接口初始化，监听地址的绑定，以及listen状态。
-***** selectReaders(avail); //意义不大，因为只有一个监听套接字
-      select()函数将会判断套接口是否可读，如果可读的话将会返回相应的套接口。
+***** selectReaders(avail)
+            //意义不大，因为只有一个监听套接字
+            select()函数将会判断套接口是否可读，如果可读的话将会返回相应的套接口。
 ***** acceptConnectionptr
-      
+            该函数将会返回一个新的套接口对象（XSOCKET）。
+	       即accept的返回值
+***** XServiceThread
+            该过程上面新生成的套接口作为参数，产生一个新的子线程，
+	    用来处理和 templatecdr之间的数据连接。
+******  XServiceThread::run()
+	        这里，我们将和templatecdr进行通讯处理，首先先判断传过来的数据前四个字符是否为xczy，如果不是则丢掉重新接收，
+		否则，我们将根据第5个字符(command) 来判定dbss做不同的处理动作。
+****** commandFactory->build(command, this)
+               该函数将根据不同的command 值来返回相应的 XMWCommand 派生类对象。
+	   心跳命令：XMWHeartBeatCmd
+	           读取数据命令：XMWDefaultCmd
+******  readRequest  
+                  * printg(data, qmessage.getMessage())  
+		          这里我们将读到的数据，写入到 qmessage中。
+    		  * queueId = readlong(data+sizeof(XMessage));
+	                      这里将返回一个queueId. important
+     * XMemoryCache* pqueue = (theQmanager==NULL) ? NULL : theQmanager->OpenQueue(queueId)（后面会讲到）
+                            我们用上面的queueId，打开一个 XMemoryCache 类对象。该对象将通过使用fPutMsg这个函数把我们上面读到的数据
+                           写入到缓存中。
+       
+****** writeResponse  暂无
+	           
+	          
+	       
+       
+		 
+	     
+
+       
+       
 *** server_open函数
-*** g_CFrameToDb.setFrame (strrBuff) 不明
+    主要通过theQmanager这个对象，来创造XMemoryCache值。
+**** hashfds（char* str）
+              该函数 通过提供的字符串参数,生成出一个整形数值（handle),作为生成XMemoryCache 对象的参数。
+**** CreateQueue 
+            生成一个CreateQueue交由theQmanager来管理.
 *** g_CFrameToDb.begin () 
     通过帐号密码，链接oracle 数据库。
 *** while 主循环
+****  server_retrieve(strrBuff, nLen, hServerQueue)
+           在while 循环中 ，该函数将根据hServerQueue找到对应的XMemoryCache对象，
+	   然后将数据取出，存入到strrBuff中去。
+	   
+
+****  tStore.Store((unsigned char*)strrBuff)
 
