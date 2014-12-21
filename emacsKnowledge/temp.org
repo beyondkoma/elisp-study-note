@@ -1,0 +1,63 @@
+*
+* 
+
+#+INCLUDE: "~/.emacs" src emacs-lisp
+
+#+BEGIN_HTML
+  <div class="cnblogs_Highlighter">
+  <pre class="brush:cpp">
+  int main()
+  {
+    return 0;
+  }
+  </pre>
+  </div>
+#+END_HTML
+
+
+
+#+BEGIN_VERSE
+ Great clouds overhead
+ Tiny black birds rise and fall
+
+ Snow covers Emacs
+     -- AlexSchroeder
+#+END_VERSE
+
+#+BEGIN_QUOTE
+  缩进区块
+#+END_QUOTE
+
+
+#+BEGIN_CENTER
+Everything should be made as simple as possible, \\
+but not any simpler
+#+END_CENTER
+
+
+#+BEGIN_SRC ruby
+  require 'redcarpet'
+  md = Redcarpet.new("Hello, world.")
+  puts md.to_html
+#+END_SRC
+
+
+: 单行的例子以冒号开头
+
+#+BEGIN_EXAMPLE
+ 多行的例子
+ 使用区块
+#+END_EXAMPLE
+
+#+BEGIN_COMMENT
+  块注释
+  ...
+hf
+ #+END_COMMENT
+
+
+
+
+
+
+
