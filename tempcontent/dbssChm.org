@@ -1,7 +1,7 @@
 #+TITLE: dbss程序讲解
 #+AUTHOR: gaolan
 #+EMAIL:850239158@qq.com
-
+#+STARTUP: indent
 * main入口
 ** g_pMDSMain
    g_pMDSMain是一个指向CDBSSAPP对象的指针。
@@ -69,16 +69,14 @@
 *** server_open函数
     主要通过theQmanager这个对象，来创造XMemoryCache值。
 **** hashfds（char* str）
-              该函数 通过提供的字符串参数,生成出一个整形数值（handle),作为生成XMemoryCache 对象的参数。
+     该函数 通过提供的字符串参数,生成出一个整形数值（handle),作为生成XMemoryCache 对象的参数。
 **** CreateQueue 
             生成一个CreateQueue交由theQmanager来管理.
 *** g_CFrameToDb.begin () 
     通过帐号密码，链接oracle 数据库。
 *** while 主循环
 ****  server_retrieve(strrBuff, nLen, hServerQueue)
-           在while 循环中 ，该函数将根据hServerQueue找到对应的XMemoryCache对象，
-	   然后将数据取出，存入到strrBuff中去。
-	   
-
+      在while 循环中 ，该函数将根据hServerQueue找到对应的XMemoryCache对象，
+      然后将数据取出，存入到strrBuff中去。
 ****  tStore.Store((unsigned char*)strrBuff)
 

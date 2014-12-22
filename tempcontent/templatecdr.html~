@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>templatecdr程序讲解</title>
+<!-- 2014-12-15 一 03:39 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="gaolan" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012  Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">templatecdr程序讲解</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. main函数</a>
+<ul>
+<li><a href="#sec-1-1">1.1. runPara 对象</a></li>
+<li><a href="#sec-1-2">1.2. Service* svc = svcFactory-&gt;getService(runPara.getString("SVCTYPE","CONTAINERSERVICE"),runPara)</a></li>
+<li><a href="#sec-1-3">1.3. Runable * run = CRunableFactory::instance()-&gt;getRunable(CRunableFactory::RUN<sub>IN</sub><sub>PROCESS</sub><sub>ENV</sub>)</a></li>
+<li><a href="#sec-1-4">1.4. run-&gt;setService(svc)</a></li>
+<li><a href="#sec-1-5">1.5. run-&gt;run()</a>
+<ul>
+<li><a href="#sec-1-5-1">1.5.1. ContainerService::run()</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-6">1.6. while循环</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> main函数</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> runPara 对象</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+该变量将把配置文件的信息，全部读取出来。
+该类类型CRuntimePara的主要数据结构为：
+</p>
+<ol class="org-ol">
+<li>private:
+  std::map&lt;std::string,std::string&gt; _mapParaValue;
+该结构将存储每一个具体字段的信息。
+</li>
+<li>std::map&lt;std::string,CRuntimePara&gt; _mapChild;
+该结构将存储子结构的信息。
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Service* svc = svcFactory-&gt;getService(runPara.getString("SVCTYPE","CONTAINERSERVICE"),runPara)</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+该 svcFactory指针（CServiceFactory *） 将根据配置文件中"SVCTYPE"指向的值来生成对应的服务对象svc（多态对象).
+主要有四大服务： "CONTAINERSERVICE"， "FILESTORESERVICE"，"SOCKETSERVICE"，"IMEISERVICE"。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Runable * run = CRunableFactory::instance()-&gt;getRunable(CRunableFactory::RUN<sub>IN</sub><sub>PROCESS</sub><sub>ENV</sub>)</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+这里产生一个将生成一个Runable类型的指针对象，该对象用来管理新开启进程或者线程的运行，服务类型（四大服务）。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> run-&gt;setService(svc)</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+这里将加载上面生成的服务对象。我们这里开启的首个服务是"CONTAINERSERVICE"的.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> run-&gt;run()</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+在这里我们将fork出一个子进程出来，用来执行"CONTAINERSERVICE"服务。
+</p>
+</div>
+<div id="outline-container-sec-1-5-1" class="outline-4">
+<h4 id="sec-1-5-1"><span class="section-number-4">1.5.1</span> ContainerService::run()</h4>
+<div class="outline-text-4" id="text-1-5-1">
+<p>
+在这里我们的子进程将开始工作。
+</p>
+</div>
+<ol class="org-ol"><li>startServer()<br  /><div class="outline-text-5" id="text-1-5-1-1">
+<p>
+std::map&lt;std::string,CRuntimePara&gt; _mapServiceConfig；
+该结构用来管理即将准备开启服务的所有项。
+</p>
+</div>
+<ol class="org-ol"><li>tryStartOneService((*iterSvcPara).second)<br  /><div class="outline-text-6" id="text-1-5-1-1-1">
+<p>
+该函数将用来开启子服务。
+</p>
+</div>
+</li>
+
+<li>run = CRunableFactory::instance()-&gt;getRunable(CRunableFactory::RUN<sub>IN</sub><sub>PROCESS</sub><sub>ENV</sub>)<br  /><div class="outline-text-6" id="text-1-5-1-1-2">
+<p>
+可以根据配置文件选择开启子进程还是子线程。
+</p>
+</div>
+</li>
+
+<li>run-&gt;setService(psvc)<br  /></li>
+<li>run-&gt;run()<br  /><div class="outline-text-6" id="text-1-5-1-1-4">
+<p>
+这里我们先只看FileStoreService这个服务。
+</p>
+</div>
+<ol class="org-ol"><li>void FileStoreService::runService()<br  /><ol class="org-ol"><li>pTrans-&gt;Init(<sub>RunPara</sub>)<br  /><div class="outline-text-8" id="text-1-5-1-1-4-1-1">
+<p>
+这里我们将读取该子服务的配置文件，存储相应的数据，并初始化套接口的内容。
+</p>
+</div>
+<ol class="org-ol"><li>_vecParser<br  /><div class="outline-text-9" id="text-1-5-1-1-4-1-1-1">
+<p>
+将配置文件中的解析信息，加载到<sub>vecParser中</sub>,以备使用。
+结构如下std::vector&lt;templateParser*&gt; _vecParser;
+</p>
+</div>
+</li>
+
+<li>client<sub>start（）</sub><br  /><div class="outline-text-9" id="text-1-5-1-1-4-1-1-2">
+<p>
+将网络通讯部分的信息初始化。
+</p>
+</div>
+<ol class="org-ol"><li>theMessagePool.start()<br  /><div class="outline-text-10" id="text-1-5-1-1-4-1-1-2-1">
+<p>
+这里主要是将线程池打开（开启新的线程池）。它通过循环来管理XMessageQueue对象
+控制每一个XMessageQueue 按顺序执行。
+</p>
+</div>
+</li></ol>
+</li>
+
+<li>SetMDSSSParam(g<sub>lpszMainDbUrl</sub>, (char*)g<sub>lpszHostPortName</sub>.c<sub>str</sub>())<br  /><ol class="org-ol"><li>g<sub>hMainDb</sub> = client<sub>open</sub>(pHostIp)<br  /><div class="outline-text-10" id="text-1-5-1-1-4-1-1-3-1">
+<p>
+根据要访问的网络地址开启套接字。
+</p>
+</div>
+<ol class="org-ol"><li>pque = XMWFactory::BuildQueueConnection(clientUrl, "xczy", "xczy",true)<br  /><div class="outline-text-11" id="text-1-5-1-1-4-1-1-3-1-1">
+<p>
+这里我们将完成客户端套接口的初始化，包括套接口初始化参数设置，connect()等操作。
+函数执行成功将返回新生成的XMessageQueue类型的对象。
+XMessageQueue将维持XMWConnection这个连接的运行。
+</p>
+</div>
+</li>
+
+<li>theMessagePool.RegisterQueue(pque)<br  /><div class="outline-text-11" id="text-1-5-1-1-4-1-1-3-1-2">
+<p>
+把上面生成的XMessageQueue注册到theMessagePool中去，交由线程池来管理。
+</p>
+</div>
+</li></ol>
+</li></ol>
+</li></ol>
+</li>
+<li>while 循环处理<br  /><ol class="org-ol"><li>bContinue = pTrans-&gt;getRecord()<br  /><div class="outline-text-9" id="text-1-5-1-1-4-1-2-1">
+<p>
+总共有两种类型的数据，xml类型的我们先不考虑。
+这里 pTrans是 File<sub>translater类型的</sub> 对象，作为FileStoreService的私有成员变量。
+</p>
+</div>
+<ol class="org-ol"><li>ReadingFile != NULL。<br  /><div class="outline-text-10" id="text-1-5-1-1-4-1-2-1-1">
+<p>
+说明文件流对象，正在运行中。
+我们将用fgets将行数据读取到 _chRecord中去，并返回处理。
+</p>
+</div>
+</li>
+
+<li>ReadingFile == NULL。<br  /><div class="outline-text-10" id="text-1-5-1-1-4-1-2-1-2">
+<p>
+这里我们将做读取文件内容的工作，将文件指针存储到ReadingFile中去。并做一些必要的处理工作，比较繁琐和乱。
+</p>
+</div>
+<ol class="org-ol"><li>getFile（）<br  /><div class="outline-text-11" id="text-1-5-1-1-4-1-2-1-2-1">
+<p>
+获取文件给ReadingFile赋值。
+</p>
+</div>
+</li>
+
+<li>GetFileList()<br  /></li></ol>
+</li></ol>
+</li>
+<li>bContinue = pTrans-&gt;translateRecord()<br  /><ol class="org-ol"><li>(<sub>vecParser[i]</sub>)-&gt;DecodeRecord(<sub>chRecord</sub>, _msg.message, _msg.length)<br  /><div class="outline-text-10" id="text-1-5-1-1-4-1-2-2-1">
+<p>
+这里我们将对上面获取到的行数据进行解析，并将解析的结果存储到<sub>vecMessage中去。</sub>
+该结构定义如下std::vector&lt;MESSAGE&gt; _vecMessage；
+解析的依据是根据配置文件中"PARMTEMPLATE1"字段对应的值进行解析。具体细节暂时没有分析。
+</p>
+</div>
+</li></ol>
+</li>
+
+<li>bContinue = pTrans-&gt;sendRecordToDb()<br  /><div class="outline-text-9" id="text-1-5-1-1-4-1-2-3">
+<p>
+把<sub>vecMessage中的数据取出来，通过主通道向Db发送数据。</sub>
+</p>
+</div>
+<ol class="org-ol"><li>SendSSN2DB((*ite).message, (*ite).length)<br  /><ol class="org-ol"><li>client<sub>enqueue</sub>(pstrDest, nLen, g<sub>hMainDb</sub>)<br  /><div class="outline-text-11" id="text-1-5-1-1-4-1-2-3-1-1">
+<p>
+这里我们将把数据pstrDest存储到XMessageQueue中去，并交由线程池来处理。
+</p>
+</div>
+</li></ol>
+</li></ol>
+</li></ol>
+</li></ol>
+</li></ol>
+</li></ol>
+</li>
+<li>while循环<br  /><ol class="org-ol"><li>maintainService（）<br  /><div class="outline-text-6" id="text-1-5-1-2-1">
+<p>
+该函数主要做的是维持工作，我们用std::map&lt;std::string,Runable*&gt; _mapService;
+来记录正在运行的子服务。如果子服务不再运行而且"SVCUSED"=1，则我们将重新开启子服务
+tryStartOneService((*iteRunPara).second)
+</p>
+</div>
+</li></ol>
+</li></ol>
+</div>
+</div>
+
+<div id="outline-container-sec-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> while循环</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+主进程做循环维护工作，等待子进程的结束，返回必要的日志信息。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: gaolan</p>
+<p class="date">Created: 2014-12-15 一 03:39</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.1)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
