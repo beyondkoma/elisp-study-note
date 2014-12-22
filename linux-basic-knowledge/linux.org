@@ -46,26 +46,54 @@
     [:digit]  任意一个数字
     [:lower:]  任意小写字母
     [:upper:]  任意大写字母
+** tcpdump 网络抓包
+   * 抓本地回环接口数据包端口号为7697
+   ： tcpdump -i lo  port 7697
+** I/O重定向
+*** grep  pattern [file ....]
+    -i 选项，使grep不区分大小写。
+    -v使grep只输出不匹配的选项
+** 配置与环境
+*** printenv:   
+    这个只显示中所有的环境变量，而set还会包括shell变量，和shell 函数。
+*** set:
+*** export:
+*** alias
+    查看 别名
+    ～/.bashrc 和~/.bash_profile都是用户的启动文件，但是前者是基于non-login shell的 而后者则是基于login-shell的。
+    source .bashrc
+    使环境变量直接生效。
+**  文件搜索
 ** shell 脚本
-   + 算术表达式
+   * 算术表达式
       格式如下: $((expression)) 算术表达式只支持整数不支持小数，如：
      ： echo $(($((5**2)) * 3)) 空格在算术表达式重视没有意义的，所以你可以任意的嵌套。
-   + 双引号(soft quote)
+   * 双引号(soft quote)
      #+BEGIN_EXAMPLE
        考虑 两个例子的区别
        : echo $(cal)
        : echo "$(cal)"
     #+END_EXAMPLE
-   + 单引号
+   * 单引号
      #+BEGIN_EXAMPLE
       several examples:
       /1. echo text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER/
      /2.  echo "text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER"/
      /3.  'echo text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER'/
      #+END_EXAMPLE
-   + 转义字符
+   * 转义字符
      \ 可以屏蔽特殊字符的意思
      ： echo " balance is \$5.00"
+   *shell 变量。
+     常量要大写，非常量则需要小写
+     变量赋值时是可以扩展为字符串的任意值。
+     eg:
+           a=z
+	   b="a string"
+	   c="a string and $b"
+	   d=$(ls-l foo.txt)
+	   e=$((5*7))
+	   f="\t\ta string\n"
 
      
 
@@ -79,19 +107,3 @@
 
    
    
-
-** tcpdump 网络抓包
-   * 抓本地回环接口数据包端口号为7697
-   ： tcpdump -i lo  port 7697
-** I/O重定向
-*** cat:
-*** sort:
-*** uniq:
-*** wc:
-*** grep:
-*** head:
-*** tail:
-
-
-_____
-** 
