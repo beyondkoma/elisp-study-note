@@ -84,8 +84,8 @@
    * 转义字符
      \ 可以屏蔽特殊字符的意思
      ： echo " balance is \$5.00"
-   *shell 变量。
-     常量要大写，非常量则需要小写
+   * shell 变量。
+      常量要大写，非常量则需要小写
      变量赋值时是可以扩展为字符串的任意值。
      eg:
            a=z
@@ -94,6 +94,18 @@
 	   d=$(ls-l foo.txt)
 	   e=$((5*7))
 	   f="\t\ta string\n"
+   * if语句
+     if commands; then
+                   commands
+     [elif     commands; then
+                    commands....]
+     [else 
+                 commands]
+     fi
+   * test 表达式
+     [ expression ]
+     command1 && command2
+     command1 || command2
 
      
 
