@@ -1,4 +1,5 @@
-#！ /bin/sh
+
+#！/bin/sh
 
 # Program to out put a system information page
 
