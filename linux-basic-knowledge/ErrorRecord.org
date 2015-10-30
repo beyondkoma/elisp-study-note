@@ -1,4 +1,16 @@
 
 
-* dbss
-**  dbss运行错误: error while loading shared libraries: libclntsh.so.11.1: cannot open shared object file: No such file or directory
+
+
+
+
+* scheme解释器错误.
+** 错误原因：
+   环境变量拼写错误:enviroment 应该写成environment.
+   但是mit-scheme 不知道为什么并没有在我调用procedure-environment 告诉我该函数对象不存在（猜测可能是系统内置函数）
+   #+BEGIN_SRC scheme
+   (define (procedure-enviroment　p )
+   (cadddr))
+   #+END_SRC scheme
+** 错误级别
+   高，几乎花了将近一周采用各种办法才找到问题．以后写程式时必须专心专注，多怀疑自己程序的问题，而不是环境，令外不要完全依赖解释器报错提供给我们帮助．
