@@ -1,0 +1,7 @@
+
+* python 常用函数
+ isinstance(object,type) 检查第一个参数对象是否是第二个参数的类型或者子类
+
+    
+   
+ 
