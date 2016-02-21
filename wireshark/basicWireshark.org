@@ -1,0 +1,25 @@
+
+
+* wireshark常用过滤方法
+ * udp Packets
+   udp[8:4]==90:90:90:03
+ * icmp
+   (icmp.type == 3 && icmp.code == 2) || (icmp.type == 4 && icmp.code == 0)
+ * tcp 过滤重传包
+   not tcp.analysis.duplicate_ack and not tcp.analysis.retransmission
+ * 帧包含指定字符串
+   frame contains “cmd”
+ * 操作符过滤
+   (pop contains "PASS") || (http contains "password")
+ * Standard expressions
+   http.request.uri matches "login.*=user"
+ * Cookies 捕捉指定网站的cookies
+   http.cookie and http.host contains "baidu"
+ * 
+
+   
+
+
+
+
+
